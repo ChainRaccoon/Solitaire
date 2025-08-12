@@ -4,6 +4,5 @@ public class SolitaireTests {
         SolitaireTextUI sg = new SolitaireTextUI();
 
         sg.playGame();
-
     }
 }

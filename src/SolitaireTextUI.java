@@ -14,11 +14,12 @@ public class SolitaireTextUI {
 
         // mostrar estado actual del juego
         System.out.println(sg);
-        System.out.println("Que operación quieres hacer?");
         menu();
+        System.out.println("Que operación quieres hacer?");
+
         String op = sc.nextLine();
         op = op.toUpperCase();
-        while (!op.equals("Q")) {
+        while (!op.equals("Q") && !sg.isGameOver()) {
             switch (op) {
                 case "A":
                     sg.moveWasteToFoundation();
@@ -43,8 +44,7 @@ public class SolitaireTextUI {
                         System.out.println("Escribe el número del Tableau (1-7) donde se colocará. ");
                         tableauDestino = getTableauNumber();
                         if (tableauDestino > 0 && tableauDestino <= 7) {
-                            //sg.moveTableauToTableau(tableauFuente, tableauDestino);
-                            sg.moveTableauToTableauMany(tableauFuente, tableauDestino);
+                            sg.moveTableauToTableau(tableauFuente, tableauDestino);
                         }
                     }
                     break;
@@ -59,12 +59,15 @@ public class SolitaireTextUI {
                     System.out.println("Operación desconocida");
             }
             System.out.println(sg);
-            System.out.println("Que operación quieres hacer?");
+
             menu();
+            System.out.println("Que operación quieres hacer?");
             op = sc.nextLine();
             op = op.toUpperCase();
         }
-
+        if (sg.isGameOver()) {
+            System.out.println("GAME OVER");
+        }
     }
 
     private void menu() {
@@ -72,7 +75,7 @@ public class SolitaireTextUI {
         System.out.println("B) Draw Cards.");
         System.out.println("C) Reload Draw Pile");
         System.out.println("D) Move Tableau to Foundation");
-        System.out.println("E) Move Tableau to Tableau TESTING MANY");
+        System.out.println("E) Move Tableau to Tableau");
         System.out.println("F) Move Waste Pile to Tableau");
         System.out.println("Q) Salir.");
     }

@@ -1,4 +1,5 @@
 import DeckOfCards.CartaInglesa;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -14,6 +15,7 @@ public class TableauDeck {
 
     /**
      * Carga las cartas iniciales y voltea la última.
+     *
      * @param cartas iniciales
      */
     public void inicializar(ArrayList<CartaInglesa> cartas) {
@@ -25,6 +27,7 @@ public class TableauDeck {
 
     /**
      * Remove cards starting from the one with a specified value.
+     *
      * @param value of starting card to remove
      * @return removed cards or empty ArrayList if it is not possible to remove.
      */
@@ -42,34 +45,35 @@ public class TableauDeck {
         }
         return removed;
     }
+
+    public CartaInglesa viewCardStartingAt(int value) {
+        CartaInglesa cartaConElValorDeseado = null;
+        for (CartaInglesa next : cartas) {
+            if (next.isFaceup()) {
+                if (next.getValor() <= value) {
+                    cartaConElValorDeseado = next;
+                    break;
+                }
+            }
+        }
+        return cartaConElValorDeseado;
+    }
+
     /**
      * Agrega una carta volteada al montículo. Sólo la agrega si:
-     *  A) es la siguiente carta en la secuencia
-     *  B) está vacio y la carta es un Rey
+     * A) es la siguiente carta en la secuencia
+     * B) está vacio y la carta es un Rey
      *
      * @param carta que se intenta almancenar
      * @return true si se pudo guardar la carta, false si no
      */
     public boolean agregarCarta(CartaInglesa carta) {
         boolean agregado = false;
-        if (cartas.isEmpty()) {
-            // la agrega sólo si es un rey
-            if (carta.getValor()==13) {
-                carta.makeFaceUp();
-                cartas.add(carta);
-                agregado = true;
-            }
-        } else {
-            CartaInglesa ultima = cartas.getLast();
-            // se agrega si es del color alterno a la última
-            if (!ultima.getColor().equals(carta.getColor())) {
-                // y es la siguiente en la secuencia
-                if (ultima.getValor()==carta.getValor()+1) {
-                    carta.makeFaceUp();
-                    cartas.add(carta);
-                    agregado = true;
-                }
-            }
+
+        if (sePuedeAgregarCarta(carta)) {
+            carta.makeFaceUp();
+            cartas.add(carta);
+            agregado = true;
         }
         return agregado;
     }
@@ -86,6 +90,7 @@ public class TableauDeck {
         }
         return ultimaCarta;
     }
+
     /**
      * Remover la última carta del montículo.
      *
@@ -120,6 +125,7 @@ public class TableauDeck {
     /**
      * Agrega un bloque de cartas al Tableau si la primera carta de las cartas recibidas
      * es de color alterno a la última carta del tableau y también es la siguiente.
+     *
      * @param cartasRecibidas
      * @return true si se pudo agregar el bloque, false si no
      */
@@ -128,35 +134,46 @@ public class TableauDeck {
 
         if (!cartasRecibidas.isEmpty()) {
             CartaInglesa primera = cartasRecibidas.getFirst();
-            if (isEmpty()) {
-                // si no hay cartas en el tableau, la carta que se trata de acomodar
-                // debe ser Rey
-                if (primera.getValor()==13) {
-                    cartas.addAll(cartasRecibidas);
-                    resultado = true;
-                }
-            } else {
-                CartaInglesa ultima = cartas.getLast();
-                // se agrega si es del color alterno a la última
-                if (!ultima.getColor().equals(primera.getColor())) {
-                    // y es la siguiente en la secuencia
-                    if (ultima.getValor()==primera.getValor()+1) {
-                        cartas.addAll(cartasRecibidas);
-                        resultado = true;
-                    }
-                }
+            // si la primera carta del bloque recibido se puede agregar al tableau actual
+            if (sePuedeAgregarCarta(primera)) {
+                // se agrega todo el bloque
+                cartas.addAll(cartasRecibidas);
+                resultado = true;
             }
-
         }
-
         return resultado;
     }
 
     /**
      * Indica si está vacío  el Tableau
+     *
      * @return true si no tiene cartas restantes, false si tiene cartas.
      */
     public boolean isEmpty() {
         return cartas.isEmpty();
+    }
+
+    /**
+     * Verifica si la carta que recibe puede ser la siguiente del tableau actual.
+     *
+     * @param cartaInicialDePrueba
+     * @return true si puede ser la siguiente, false si no
+     */
+    public boolean sePuedeAgregarCarta(CartaInglesa cartaInicialDePrueba) {
+        boolean resultado = false;
+        if (!cartas.isEmpty()) {
+            CartaInglesa ultima = cartas.getLast();
+            if (!ultima.getColor().equals(cartaInicialDePrueba.getColor())) {
+                if (ultima.getValor() == cartaInicialDePrueba.getValor() + 1) {
+                    resultado = true;
+                }
+            }
+        } else {
+            // Está vacio el tableau, solo se puede agregar la cara si es rey
+            if (cartaInicialDePrueba.getValor() == 13) {
+                resultado = true;
+            }
+        }
+        return resultado;
     }
 }

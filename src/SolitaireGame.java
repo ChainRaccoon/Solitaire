@@ -36,12 +36,13 @@ public class SolitaireGame {
 
     /**
      * Tomar la carta del Waste pile y ponerla en el tableau
+     *
      * @param tableauDestino donde se coloca la carta
      * @return true si se pudo hacer el movimiento, false si no
      */
     public boolean moveWasteToTableau(int tableauDestino) {
         boolean movimientoRealizado = false;
-        TableauDeck destino = tableau.get(tableauDestino-1);
+        TableauDeck destino = tableau.get(tableauDestino - 1);
         if (moveWasteToTableau(destino)) {
             movimientoRealizado = true;
         }
@@ -51,64 +52,56 @@ public class SolitaireGame {
     /**
      * Tomar varias cartas del Tableau fuente y colocarlas en el
      * Tableau destino.
-     * @param tableauFuente de donde se toma la carta (1-7)
-     * @param tableauDestino donde se coloca la carta (1-7)
-     * @return true si se pudo hacer el movimiento, false si no
-     */
-    public boolean moveTableauToTableauMany(int tableauFuente, int tableauDestino) {
-        boolean movimientoRealizado = false;
-        TableauDeck fuente = tableau.get(tableauFuente-1);
-        TableauDeck destino = tableau.get(tableauDestino-1);
-
-        CartaInglesa carta;
-        if (!destino.isEmpty()) {
-            carta = destino.verUltimaCarta();
-            int valorCartaInicial = carta.getValor()-1;
-            ArrayList<CartaInglesa> cartas = fuente.removeStartingAt(valorCartaInicial);
-            if (destino.agregarBloqueDeCartas(cartas)) {
-                if (!fuente.isEmpty()) {
-                    // Voltear la carta que se destapa en el Tableau
-                    fuente.verUltimaCarta().makeFaceUp();
-                }
-                movimientoRealizado = true;
-            } else {
-                // no se pudo hacer el movimiento, se regresan las cartas removidas a la fuente
-                fuente.agregarBloqueDeCartas(cartas);
-            }
-        }
-
-        return movimientoRealizado;
-    }
-
-    /**
-     * Tomar la última carta del Tableau fuente y colocarla en el
-     * Tableau destino.
-     * ESTE MÉTODO TAMBIÉN NECESITA HACER CAMBIOS DE VARIAS CARTAS.
-     * @param tableauFuente de donde se toma la carta (1-7)
+     *
+     * @param tableauFuente  de donde se toma la carta (1-7)
      * @param tableauDestino donde se coloca la carta (1-7)
      * @return true si se pudo hacer el movimiento, false si no
      */
     public boolean moveTableauToTableau(int tableauFuente, int tableauDestino) {
         boolean movimientoRealizado = false;
-        TableauDeck fuente = tableau.get(tableauFuente-1);
-        TableauDeck destino = tableau.get(tableauDestino-1);
-        CartaInglesa carta = fuente.verUltimaCarta();
-        if (moveCartaToTableau(carta,destino)) {
-            // se pudo hacer el movimiento, se elimina del tableau
-            fuente.removerUltimaCarta();
-            movimientoRealizado = true;
+        TableauDeck fuente = tableau.get(tableauFuente - 1);
+        if (!fuente.isEmpty()) {
+            TableauDeck destino = tableau.get(tableauDestino - 1);
+
+            int valorQueDebeTenerLaCartaInicialDeLaFuente;
+            CartaInglesa cartaUltimaDelDestino; // aqui se coloca la fuente
+            if (!destino.isEmpty()) {
+                // si hay cartas en el destino, la ultima y primer debe concordar
+                cartaUltimaDelDestino = destino.verUltimaCarta();
+                valorQueDebeTenerLaCartaInicialDeLaFuente = cartaUltimaDelDestino.getValor() - 1;
+            } else {
+                // si el destino está vacío, solo puede colocar rey
+                valorQueDebeTenerLaCartaInicialDeLaFuente = 13;
+            }
+            // ver que carta es la del inicio del bloque
+            CartaInglesa cartaInicialDePrueba = fuente.viewCardStartingAt(valorQueDebeTenerLaCartaInicialDeLaFuente);
+            if (cartaInicialDePrueba != null && destino.sePuedeAgregarCarta(cartaInicialDePrueba)) {
+                ArrayList<CartaInglesa> cartas = fuente.removeStartingAt(valorQueDebeTenerLaCartaInicialDeLaFuente);
+                if (destino.agregarBloqueDeCartas(cartas)) {
+                    if (!fuente.isEmpty()) {
+                        // Voltear la carta que se destapa en el Tableau
+                        fuente.verUltimaCarta().makeFaceUp();
+                    }
+                    movimientoRealizado = true;
+                }
+            }
+
         }
+
+
         return movimientoRealizado;
     }
+
     /**
      * Tomar la carta de Tableau y colocarla en el Foundation.
+     *
      * @param numero de tableau donde se moverá la carta (1-7)
      * @return true si se pudo move la carta, false si no
      */
     public boolean moveTableauToFoundation(int numero) {
         boolean movimientoRealizado = false;
 
-        TableauDeck fuente = tableau.get(numero-1);
+        TableauDeck fuente = tableau.get(numero - 1);
         CartaInglesa carta = fuente.removerUltimaCarta();
         if (moveCartaToFoundation(carta)) {
             movimientoRealizado = true;
@@ -121,6 +114,7 @@ public class SolitaireGame {
 
     /**
      * Tomar la carta de Waste y colocarla en el Tableau.
+     *
      * @param tableau donde se moverá la carta
      * @return true si se pudo move la carta, false si no
      */
@@ -135,6 +129,7 @@ public class SolitaireGame {
         }
         return movimientoRealizado;
     }
+
     /**
      * Tomar una carta de Waste y ponerla en una de las Foundations.
      *
@@ -154,15 +149,18 @@ public class SolitaireGame {
 
     /**
      * Coloca la carta recibida en el Tableau recibido.
-     * @param carta a colocar
+     *
+     * @param carta   a colocar
      * @param destino Tableau que recibe la carta.
      * @return true si se pudo hacer el movimiento, false si no
      */
     private boolean moveCartaToTableau(CartaInglesa carta, TableauDeck destino) {
         return destino.agregarCarta(carta);
     }
+
     /**
      * Coloca la carta recibida en el Foundation correspondiente.
+     *
      * @param carta a colocar
      * @return true si se pudo hacer el movimiento, false si no.
      */
