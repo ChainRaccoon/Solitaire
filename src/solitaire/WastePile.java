@@ -1,7 +1,15 @@
+package solitaire;
+
 import DeckOfCards.CartaInglesa;
 
 import java.util.ArrayList;
-
+/**
+ * Modela el montículo donde se colocan las cartas
+ * que se extraen de Draw pile.
+ *
+ * @author (Cecilia Curlango Rosas)
+ * @version (2025-2)
+ */
 public class WastePile {
     private ArrayList<CartaInglesa> cartas;
 
@@ -52,5 +60,9 @@ public class WastePile {
             stb.append(regresar.toString());
         }
         return stb.toString();
+    }
+
+    public boolean hayCartas() {
+        return !cartas.isEmpty();
     }
 }

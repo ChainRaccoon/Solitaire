@@ -1,12 +1,19 @@
+package solitaire;
+
 import DeckOfCards.CartaInglesa;
 import DeckOfCards.Palo;
 
-import javax.smartcardio.Card;
 import java.util.ArrayList;
-
+/**
+ * Juego de solitario.
+ *
+ * @author (Cecilia Curlango Rosas)
+ * @version (2025-2)
+ */
 public class SolitaireGame {
     ArrayList<TableauDeck> tableau = new ArrayList<>();
     ArrayList<FoundationDeck> foundation = new ArrayList<>();
+    FoundationDeck lastFoundationUpdated;
     DrawPile drawPile;
     WastePile wastePile;
 
@@ -92,6 +99,7 @@ public class SolitaireGame {
         return movimientoRealizado;
     }
 
+
     /**
      * Tomar la carta de Tableau y colocarla en el Foundation.
      *
@@ -167,6 +175,7 @@ public class SolitaireGame {
     private boolean moveCartaToFoundation(CartaInglesa carta) {
         int cualFoundation = carta.getPalo().ordinal();
         FoundationDeck destino = foundation.get(cualFoundation);
+        lastFoundationUpdated = destino;
         return destino.agregarCarta(carta);
     }
 
@@ -204,6 +213,22 @@ public class SolitaireGame {
             tableauDeck.inicializar(drawPile.getCartas(i + 1));
             tableau.add(tableauDeck);
         }
+    }
+
+    public DrawPile getDrawPile() {
+        return drawPile;
+    }
+
+    public ArrayList<TableauDeck> getTableau() {
+        return tableau;
+    }
+
+    public WastePile getWastePile() {
+        return wastePile;
+    }
+
+    public FoundationDeck getLastFoundationUpdated() {
+        return lastFoundationUpdated;
     }
 
     @Override

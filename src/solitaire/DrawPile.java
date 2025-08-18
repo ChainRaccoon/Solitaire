@@ -1,3 +1,5 @@
+package solitaire;
+
 import DeckOfCards.CartaInglesa;
 
 import java.util.ArrayList;
@@ -76,6 +78,13 @@ public class DrawPile {
         return cartas.size() > 0;
     }
 
+    public CartaInglesa verCarta() {
+        CartaInglesa regresar = null;
+        if (!cartas.isEmpty()) {
+            regresar = cartas.getLast();
+        }
+        return regresar;
+    }
     /**
      * Agrega las cartas recibidas al monton y las voltea
      * para que no se vean las caras.

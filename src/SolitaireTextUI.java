@@ -1,3 +1,5 @@
+import solitaire.SolitaireGame;
+
 import java.util.Scanner;
 
 public class SolitaireTextUI {

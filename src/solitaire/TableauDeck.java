@@ -1,10 +1,12 @@
+package solitaire;
+
 import DeckOfCards.CartaInglesa;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 
 /**
- * Modela un monículo donde se ponen las cartas
+ * Modela un montículo donde se ponen las cartas
  * de por valor, alternando el color.
  *
  * @author Cecilia M. Curlango
@@ -175,5 +177,21 @@ public class TableauDeck {
             }
         }
         return resultado;
+    }
+
+    /**
+     * Obtiene la última carta del Tableau sin removerla.
+     * @return última carta, null si no hay cartas
+     */
+    public CartaInglesa getUltimaCarta() {
+        CartaInglesa ultimaCarta = null;
+        if (!cartas.isEmpty()) {
+            ultimaCarta = cartas.getLast();
+        }
+        return ultimaCarta;
+    }
+
+    public ArrayList<CartaInglesa> getCards() {
+        return cartas;
     }
 }

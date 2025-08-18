@@ -1,4 +1,5 @@
-import DeckOfCards.Carta;
+package solitaire;
+
 import DeckOfCards.CartaInglesa;
 import DeckOfCards.Palo;
 
